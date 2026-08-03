@@ -1,0 +1,13 @@
+# limen declarations for the Mycophonic organization.
+#
+# This repository is where `limen github check -org mycophonic` reads its
+# declarations from, so org-level entries live here rather than in any code
+# repository. Entries are a delta — exceptions and declarations only, never a
+# copy of the settings themselves — and each one records WHY.
+
+github:
+  # The expected owner roster. This is NOT an exemption: limen parses the login
+  # names out of this line and compares them against the live owner list on
+  # every run, so the check keeps enforcing. Add an owner to the organization
+  # without adding them here and the audit says so — which is the point.
+  org-admins: apostasie is the sole owner of this organization

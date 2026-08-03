@@ -1,0 +1,81 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - apostasie
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        **Not for security issues** — do not report a vulnerability here. See
+        [SECURITY.md](https://github.com/mycophonic/.github/blob/main/.github/SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The release tag, or the commit SHA if you built from source. `<tool> --version` usually knows.
+      placeholder: v0.0.7 (or 3d3c42e)
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: What operating system are you running this on?
+      multiple: false
+      options:
+        - macOS
+        - Windows
+        - Debian
+        - Alpine
+        - Other Linux
+    validations:
+      required: true
+  - type: dropdown
+    id: arch
+    attributes:
+      label: Architecture
+      multiple: false
+      options:
+        - arm64 / aarch64
+        - amd64 / x86_64
+        - Other
+  - type: input
+    id: format
+    attributes:
+      label: Audio format involved
+      description: >
+        Codec and, where it matters, sample rate and bit depth — most bugs in this ecosystem turn out to be format-specific. Leave blank if the issue is not audio-related.
+      placeholder: FLAC 24-bit/96kHz, ALAC, DSD64…
+  - type: checkboxes
+    id: container
+    attributes:
+      label: Container
+      description: Check this if you are running inside a container
+      options:
+        - label: I am running this inside a container
+          required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: A bug happened!
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: The exact commands you ran, in order. A reproduction we can paste into a shell is worth ten descriptions.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell

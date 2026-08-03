@@ -1,0 +1,88 @@
+# CI for the organization's community-health repository.
+#
+# The canonical shape — GitHub's own checkout pinned by SHA, aqua for the
+# pinned toolchain, and `just` recipes identical to the ones a laptop runs —
+# but on a single linux leg. ci.yaml is seeded once and is the project's own
+# from there (see book/mandatory-files.md), and this repository ships no code:
+# nothing here is platform-dependent, so the five-runner matrix the code
+# repositories need would buy nothing but minutes.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# No default token permissions: each job states what it needs.
+permissions: {}
+
+# A superseded run (new push to the same branch/PR) is cancelled, not raced.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Single leg, but kept as a matrix so the check-run name stays
+        # `verify (ubuntu-24.04)` — the shape the canonical limen:main ruleset
+        # names in its required status checks.
+        os: [ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The token is not left behind in .git/config: nothing in this
+          # workflow talks to GitHub after checkout.
+          persist-credentials: false
+          # Full history: `just do lint commits` validates the commit range
+          # against the PR's base branch, which a shallow clone lacks.
+          fetch-depth: 0
+
+      - name: Install aqua (pinned, checksum-verified)
+        uses: ./.github/actions/setup-aqua
+
+      - name: Install pinned tools
+        # Not optional: setup-aqua only installs aqua itself and puts its bin
+        # directory on PATH — that directory is EMPTY until this runs. The
+        # shims created here are what make `just` (and everything the recipes
+        # call) resolve at all. Link-only: each tool downloads lazily on first
+        # use and is verified against the committed aqua-checksums.json then,
+        # so a job only pays for the tools its recipes actually run.
+        run: aqua install --only-link
+
+      - name: Lint
+        run: just lint
+
+      - name: Test
+        # A no-op today (the Justfile's `test` recipe is empty) — kept so the
+        # shape matches the canonical ci.yaml and tests run the day there are any.
+        run: just test
+
+  # The single required status check, identical to the canonical ci.yaml's.
+  # This repository runs one leg where the code repositories run five — which
+  # is exactly why the ruleset names this job and not the matrix.
+  gate:
+    needs: [verify]
+    # always(), with the result asserted: without it a failed dependency SKIPS
+    # this job, and a skipped required check does not block a merge.
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Every verify leg succeeded
+        env:
+          RESULT: ${{ needs.verify.result }}
+        run: |
+          printf 'verify: %s\n' "$RESULT"
+          [ "$RESULT" = "success" ]

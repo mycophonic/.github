@@ -1,0 +1,15 @@
+name: Feature request
+description: Suggest an idea for this project
+title: "[Feature]: "
+labels: ["enhancement"]
+assignees:
+  - apostasie
+body:
+  - type: textarea
+    id: what-is-it
+    attributes:
+      label: What would that be?
+      description: Tell us what that feature would be, what use case it is helping, who is it for
+      placeholder: Awesome feature XYZ
+    validations:
+      required: true

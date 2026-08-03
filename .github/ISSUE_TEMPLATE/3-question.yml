@@ -1,0 +1,22 @@
+name: Question
+description: Ask a question about something that is not covered in the documentation
+title: "[Question]: "
+labels: ["question"]
+assignees:
+  - apostasie
+body:
+  - type: checkboxes
+    id: documentation
+    attributes:
+      label: Documentation
+      description: Check this once you have looked into the documentation
+      options:
+        - label: I read the documentation but could not find an answer there
+          required: true
+  - type: textarea
+    id: question-body
+    attributes:
+      label: My question
+      placeholder: What...? Why...?
+    validations:
+      required: true
