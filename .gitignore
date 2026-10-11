@@ -51,3 +51,7 @@ Desktop.ini
 # yarn-debug.log*
 # yarn-error.log*
 # pnpm-debug.log*
+
+# Required by limen (book/mandatory-files.md, ".gitignore").
+/_scratch
+.claude

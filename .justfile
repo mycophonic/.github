@@ -21,3 +21,6 @@ test:
 # the script like any other we ship.
 issue-forms:
     @.github/workflows/validate-issue-forms.sh
+
+# --- added by limen fix: the recipe the security workflow runs ---
+security: do::security::default

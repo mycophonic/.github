@@ -1,6 +1,6 @@
 # DO NOT EDIT MANUALLY.
 # This file provides shared tasks common to all projects and managed by limen.
-# Project recipes live in the root Justfile, below the shared-baseline import.
+# Project recipes live in the root .justfile, below the shared-baseline import.
 
 set working-directory := '../..'
 
@@ -10,10 +10,8 @@ set quiet
 # Shared private _banner recipe (see lib.just).
 import 'lib.just'
 
-# The mutating counterpart of `just do lint homebrew` — brew's vendored
-# RuboCop with --fix. Same machine-layer exception as the lint module:
-# BREW_BIN is captured from the ambient PATH at just startup, never from the
-# hermetic PATH (the reasoning lives in lint-homebrew.just and main.just).
+# The mutating twin of `just do lint homebrew`; BREW_BIN as in
+# lint-homebrew.just.
 
 default: style
 
@@ -23,24 +21,24 @@ style: (_banner "fix homebrew" "style")
     #!/usr/bin/env bash
     set -euo pipefail
     {{ _skip_unless_macos }}
-    # --cached --others --exclude-standard: tracked *and* new untracked files,
-    # still honoring .gitignore (same as `fix just`). Modern tap layout ONLY —
-    # Formula/ and Casks/; the legacy locations are deliberately unsupported
-    # (see lint-homebrew.just). Discovery runs before the brew lookup so a
-    # repo without formulas passes vacuously even brew-less.
+    # Same discovery as `lint homebrew style`, through a file (see lint.just's
+    # `just` recipe).
+    list=$(mktemp "${TMPDIR:-/tmp}/fix-homebrew.XXXXXX")
+    trap 'rm -f "$list"' EXIT
+    git ls-files -z --cached --others --exclude-standard \
+        'Formula/*.rb' 'Formula/**/*.rb' 'Casks/*.rb' 'Casks/**/*.rb' > "$list"
     files=()
     while IFS= read -r -d '' f; do
         # Tracked-but-deleted files are skipped (see lint.just's `just` recipe).
         [ -f "$f" ] || continue
         files+=("$f")
-    done < <(git ls-files -z --cached --others --exclude-standard \
-        'Formula/*.rb' 'Formula/**/*.rb' 'Casks/*.rb' 'Casks/**/*.rb')
+    done < "$list"
     if [ "${#files[@]}" -eq 0 ]; then
         echo "no formulas or casks (Formula/, Casks/) — nothing to fix."
         exit 0
     fi
     {{ _require_brew }}
-    # shellcheck disable=SC2154 # BREW_BIN is exported by the canonical Justfile (main.just).
+    # shellcheck disable=SC2154 # BREW_BIN is exported by the canonical .justfile (main.just).
     "$BREW_BIN" style --fix "${files[@]}"
 
 # Homebrew exists on macOS only: everywhere else this recipe degrades to a

@@ -60,10 +60,10 @@ already pin, and `do lint shell` lints it like any other script we ship.
 ### The profile page lists only public repositories
 
 Most of this organization is still private. `profile/README.md` therefore links only the
-repositories that are actually public, and there is no root `.lychee.toml`.
+repositories that are actually public, and there is no root `.lint-links.toml`.
 
 Keep it that way as things open up: lychee runs unauthenticated — that is the point, it sees
 what an anonymous visitor sees — so a link to a private repository 404s and fails the run. If
 you ever want one listed before it is public, mark it 🔒 *and* exclude it in a new root
-`.lychee.toml`. Only ever exclude a repository that is private **on purpose**; an entry there
+`.lint-links.toml`. Only ever exclude a repository that is private **on purpose**; an entry there
 silences a real check.
