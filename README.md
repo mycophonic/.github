@@ -53,7 +53,7 @@ formatted, and `do lint links` (lychee) proves the links resolve — but neither
 that a well-formed YAML file is a *valid issue form*. GitHub fails that silently: it does
 not reject the file, it just refuses to render the form. Since these templates are the
 org-wide fallback, a broken one breaks issue creation in every repository that has none of
-its own. `.github/workflows/validate-issue-forms.sh` checks them against the form schema —
+its own. `.github/scripts/validate-issue-forms.sh` checks them against the form schema —
 shell plus the aqua-pinned `yq`, so it introduces no interpreter the toolchain does not
 already pin, and `do lint shell` lints it like any other script we ship.
 
