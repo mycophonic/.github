@@ -17,7 +17,7 @@ require (
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/forkcloser/dot v1.3.1 // indirect
 	github.com/forkcloser/go-graphviz v0.5.2 // indirect
-	github.com/forkcloser/godolint v0.4.0 // indirect
+	github.com/forkcloser/godolint v0.5.0 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/lmittmann/tint v1.2.1 // indirect
 	github.com/magefile/mage v1.15.0 // indirect
