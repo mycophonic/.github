@@ -27,7 +27,7 @@ packages:
   # The Go toolchain is each repository's own pin (book/tooling.md): it builds
   # the tools/go.mod tools, and a standard-library fix must not wait for a
   # limen release.
-  - name: golang/go@go1.27.2
+  - name: golang/go@go1.27.3
   # Every other tool limen requires comes from the import, at the versions
   # this limen pins: a limen bump changes that file, never this list
   # (book/tooling.md).
