@@ -13,7 +13,6 @@ It contains:
   - `GOVERNANCE.md`
   - `SECURITY.md` — private vulnerability reporting
   - `SUPPORT.md`
-  - `FUNDING.yml`
 
 These defaults apply to every repository in the organization that does not provide its own.
 GitHub only resolves them from a **public** `.github` repository, and only from the root,
