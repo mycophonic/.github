@@ -23,7 +23,7 @@ packages:
     registry: local
   # This repository's own tools, beyond limen's canonical set: yq for the
   # issue-forms validation (.justfile).
-  - name: mikefarah/yq@v4.54.2
+  - name: mikefarah/yq@v4.54.3
   # The Go toolchain is each repository's own pin (book/tooling.md): it builds
   # the tools/go.mod tools, and a standard-library fix must not wait for a
   # limen release.
